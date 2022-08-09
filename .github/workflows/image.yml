@@ -31,3 +31,10 @@ jobs:
           --tag mellotanica/skyscraper:latest \
           --tag mellotanica/skyscraper:${LATEST} \
           --platform linux/amd64,linux/armhf,linux/arm64 .
+      - name: Docker Hub Description
+        uses: peter-evans/dockerhub-description@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          repository: mellotanica/skyscraper
+
