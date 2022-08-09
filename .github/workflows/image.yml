@@ -28,5 +28,6 @@ jobs:
           LATEST=$(wget -q -O - "https://api.github.com/repos/muldjord/skyscraper/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           docker buildx build --push \
           --build-arg SKYSCRAPER_RELEASE=${LATEST} \
+          --tag mellotanica/skyscraper:latest \
           --tag mellotanica/skyscraper:${LATEST} \
           --platform linux/amd64,linux/armhf,linux/arm64 .
