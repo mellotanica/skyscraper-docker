@@ -28,14 +28,14 @@ jobs:
           LATEST=$(wget -q -O - "https://api.github.com/repos/muldjord/skyscraper/releases/latest" | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/')
           docker buildx build --push \
           --build-arg SKYSCRAPER_RELEASE=${LATEST} \
-          --cache-from mellotanica/skyscraper:latest \
+          --cache-from mellotanica/skyscraper:cache \
           --tag mellotanica/skyscraper:latest \
           --tag mellotanica/skyscraper:${LATEST} \
           --platform linux/amd64,linux/armhf,linux/arm64 .
       - name: Docker Hub Description
         uses: peter-evans/dockerhub-description@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_PASSWORD }}
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
           repository: mellotanica/skyscraper
 
