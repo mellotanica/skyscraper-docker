@@ -16,16 +16,19 @@ fi
 FLAGS="--flags ${SKYSCRAPER_FLAGS:-"${DFLFLAGS}"}"
 
 DEFAULT_MODULES="${SKYSCRAPER_MODULES:-thegamesdb}"
-declare -A MODS_MAP
-for line in $(echo "${SKYSCRAPER_PLATFORM_MODULES}" | tr ';' '\n'); do 
-    sys=$(echo $line | cut -d ':' -f1)
-    scrap=$(echo $line | cut -d ':' -f2)
-    MODS_MAP[$sys]=$scrap
-done
 
 # $1 platform
 get_scrapers() {
-    echo "${MODS_MAP[$1]:-${DEFAULT_MODULES}}" | tr ',' ' '
+    SCRAPERS="$(for line in $(echo "${SKYSCRAPER_PLATFORM_MODULES}" | tr ';' '\n'); do 
+        if [ "$(echo $line | cut -d ':' -f1)" = "$1" ]; then
+            echo $line | cut -d ':' -f2
+            break
+        fi
+    done)"
+    if [ -z "$SCRAPERS" ]; then
+        SCRAPERS="${DEFAULT_MODULES}"
+    fi
+    echo "${SCRAPERS}" | tr ',' ' '
 }
 
 # $1 platform
