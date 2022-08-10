@@ -23,10 +23,12 @@ RUN cp su-exec/su-exec /usr/local/bin
 FROM base
 
 ENTRYPOINT ["sh", "/entrypoint.sh"]
+CMD ["sh", "/scrape.sh"]
 WORKDIR /
 VOLUME /cache
 
 COPY --from=build /usr/local /usr/local
 
 COPY entrypoint.sh /
-RUN chmod +x /entrypoint.sh
+COPY scrape.sh /
+RUN chmod +x /entrypoint.sh /scrape.sh

@@ -67,6 +67,11 @@ The environment variables supported by the container are:
 - `PUID`: user id used by the container environment to edit files
 - `PGID`: group id used by the container environment to edit files
 - `SKYSCRAPER_FRONTEND`: set the output format, see Skyscraper `-f` flag
-- `SKYSCRAPER_MODULE`: set the scraping module, see Skyscraper `-s` flag
-- `SKYSCRAPER_USERCREDS`: set the scraper credentials, see Skyscraper `-u` flag
-- `SKYSCRAPER_ROMSDIR`: roms base path if it is differente from `/roms`
+- `SKYSCRAPER_MODULES`: set the default scraping modules in a comma-separated list (default: `thegamesdb`)
+- `SKYSCRAPER_PLATFORM_MODULES`: set the scraping modules to use for each platform, the value of this variable can be set to edit the default modules for specific platforms and is a columns-separated list of entries, each entry has the platform name followed by a semicolumn and a comma separated list of modules, e.g. `psx:screenscraper,thegamesdb;mame:arcadedb;fba:arcadedb`
+- `SKYSCRAPER_ROMS_DIR`: roms base path if it is differente from `/roms`
+- `SKYSCRAPER_GAMELIST_DIR`: if set, generate gamelists in this path instead of roms directory (watch out to absolute rom paths if mounting `/roms` volume in the default path). If this is a relative path, it is considered relative to each system roms folder, if it is an absolute path, a folder with the system name will be created inside this path for each processed system
+- `SKYSCRAPER_MEDIA_DIR`: if set, generate media files in this path instead of default directory (watch out to absolute rom paths if mounting `/roms` volume in the default path). If this is a relative path, it is considered relative to each system roms folder, if it is an absolute path, a folder with the system name will be created inside this path for each processed system
+- `SKYSCRAPER_FLAGS`: additional flags passed to commandline invocations (default: `uinattend,unattendskip,relative`)
+- `SKYSCRAPER_NO_RELATIVE_PATHS`: if set to `true`, avoid using `relative` flag by default
+- `SKYSCRAPER_ROMS_TO_SUBDIR`: if set to `true`, keep the roms of a system in the `/roms/$system/roms` subdir to limit performance issues when mixing gamelists and roms files in a single tree, this implies `SKYSCRAPER_GAMELIST_DIR=.`
