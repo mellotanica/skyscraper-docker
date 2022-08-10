@@ -38,6 +38,8 @@ services:
     container_name: skyscraper
     restart: unless-stopped
     environment:
+      - PUID=1000
+      - PGID=1000
       - SKYSCRAPER_FRONTEND=emulationstation
     volumes:
       - /path/to/roms:/path/to/roms
@@ -62,6 +64,8 @@ For the config.ini options check the [official documentation](https://github.com
 
 The environment variables supported by the container are:
 
+- `PUID`: user id used by the container environment to edit files
+- `PGID`: group id used by the container environment to edit files
 - `SKYSCRAPER_FRONTEND`: set the output format, see Skyscraper `-f` flag
 - `SKYSCRAPER_MODULE`: set the scraping module, see Skyscraper `-s` flag
 - `SKYSCRAPER_USERCREDS`: set the scraper credentials, see Skyscraper `-u` flag
