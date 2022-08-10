@@ -34,9 +34,9 @@ get_output_dir() {
         echo "$ROMSDIR/$1"
     elif [ -n "${SKYSCRAPER_GAMELIST_DIR}" ]; then
         if echo ${SKYSCRAPER_GAMELIST_DIR} | grep -q '^/'; then
-            echo "$ROMSDIR/$1/$SKYSCRAPER_GAMELIST_DIR"
-        else
             echo "$SKYSCRAPER_GAMELIST_DIR/$1"
+        else
+            echo "$ROMSDIR/$1/$SKYSCRAPER_GAMELIST_DIR"
         fi
     fi
 }
@@ -45,9 +45,9 @@ get_output_dir() {
 get_media_dir() {
     if [ -n "${SKYSCRAPER_MEDIA_DIR}" ]; then
         if echo ${SKYSCRAPER_MEDIA_DIR} | grep -q '^/'; then
-            echo "$ROMSDIR/$1/$SKYSCRAPER_MEDIA_DIR"
-        else
             echo "$SKYSCRAPER_MEDIA_DIR/$1"
+        else
+            echo "$ROMSDIR/$1/$SKYSCRAPER_MEDIA_DIR"
         fi
     fi
 }
