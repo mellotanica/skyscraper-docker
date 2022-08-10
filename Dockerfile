@@ -1,9 +1,9 @@
-FROM fstlx/qt5:ubuntu18 AS base
+FROM fstlx/qt5:latest AS base
 
 RUN apt-get -y install inotify-tools
 
 
-FROM fstlx/qt5:ubuntu18 AS build
+FROM fstlx/qt5:latest AS build
 
 ARG SKYSCRAPER_RELEASE
 RUN if [ -z ${SKYSCRAPER_RELEASE} ]; then echo "you MUST specify a SKYSCRAPER_RELEASE" 1>&2; exit 1; fi
