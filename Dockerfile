@@ -5,6 +5,10 @@ RUN apt-get -y install inotify-tools
 
 FROM fstlx/qt5:latest AS build
 
+RUN git clone https://github.com/ncopa/su-exec
+RUN make -C su-exec
+RUN cp su-exec/su-exec /usr/local/bin
+
 ARG SKYSCRAPER_RELEASE
 RUN if [ -z ${SKYSCRAPER_RELEASE} ]; then echo "you MUST specify a SKYSCRAPER_RELEASE" 1>&2; exit 1; fi
 
@@ -14,10 +18,6 @@ RUN rm ${SKYSCRAPER_RELEASE}.tar.gz
 RUN qmake
 RUN make -j$(nproc)
 RUN make install
-
-RUN git clone https://github.com/ncopa/su-exec
-RUN make -C su-exec
-RUN cp su-exec/su-exec /usr/local/bin
 
 
 FROM base

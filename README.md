@@ -5,7 +5,6 @@ Architectures supported by this image are:
 
 - linux/amd64
 - linux/arm64
-- linux/armhf
 
 ## Quick Start
 
