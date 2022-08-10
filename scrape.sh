@@ -29,16 +29,7 @@ get_scrapers() {
 }
 
 # $1 platform
-get_romsdir() {
-    if ${ROMSTOSUBDIR}; then
-        echo "$ROMSDIR/$1/roms"
-    else
-        echo "$ROMSDIR/$1"
-    fi
-}
-
-# $1 platform
-get_output_dif() {
+get_output_dir() {
     if ${ROMSTOSUBDIR}; then
         echo "$ROMSDIR/$1"
     elif [ -n "${SKYSCRAPER_GAMELIST_DIR}" ]; then
@@ -51,7 +42,7 @@ get_output_dif() {
 }
 
 # $1 platform
-get_media_dif() {
+get_media_dir() {
     if [ -n "${SKYSCRAPER_MEDIA_DIR}" ]; then
         if echo ${SKYSCRAPER_MEDIA_DIR} | grep -q '^/'; then
             echo "$ROMSDIR/$1/$SKYSCRAPER_MEDIA_DIR"
@@ -68,7 +59,7 @@ scrape() {
         echo "missing platform argument!" 2>&1
         return 1
     fi
-    romsdir="$(get_romsdir "$platform")"
+    romsdir="$ROMSDIR/$platform"
     outputdir="$(get_output_dir "$platform")"
     mediadir="$(get_media_dir "$platform")"
 
