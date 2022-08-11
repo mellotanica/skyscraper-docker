@@ -24,4 +24,6 @@ cacheFolder=\"${CACHE_DIR}\"
     chown "$PUID":"$PGID" config.ini
 fi
 
+chown -R "$PUID":"$PGID" /cache
+
 exec su-exec $PUID:$PGID $@
