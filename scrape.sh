@@ -86,11 +86,12 @@ scrape_all() {
 
 ## main code
 
-echo "perform global update"
-scrape_all
+if [ "${SKYSCRAPER_SKIP_GLOBAL_UPDATE}" != 'true' ]; then
+    echo "perform global update"
+    scrape_all
+fi
 
-echo "starting main loop..."
-
+echo "starting main loop"
 inotifywait -e create -e close_write -e moved_to --format "%w%f" -m -r -q "$ROMSDIR" | while read file; do
     if echo "$file" | grep -q "gamelist.xml\|${SKYSCRAPER_MEDIA_DIR:-/media/}"; then
         continue
