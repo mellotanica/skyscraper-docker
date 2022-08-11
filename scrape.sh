@@ -6,6 +6,8 @@ if [ "${SKYSCRAPER_ROMS_TO_SUBDIR}" = "true" ]; then
 else
     ROMSTOSUBDIR=false
 fi
+CACHEDIR="/cache"
+TIMESTAMP_DIR="$CACHEDIR"/lastupdate
 
 [ -n "${SKYSCRAPER_FRONTEND}" ] && FRONTEND="-f ${SKYSCRAPER_FRONTEND}"
 
@@ -29,6 +31,15 @@ get_scrapers() {
         SCRAPERS="${DEFAULT_MODULES}"
     fi
     echo "${SCRAPERS}" | tr ',' ' '
+}
+
+# $1 platform
+get_actual_roms_folder() {
+    if ${ROMSTOSUBDIR}; then
+        echo "$ROMSDIR/$1/roms"
+    else
+        echo "$ROMSDIR/$1"
+    fi
 }
 
 # $1 platform
@@ -75,20 +86,42 @@ scrape() {
         Skyscraper -p "$platform" -s "$scraper" -i "$romsdir" $FRONTEND $FLAGS
     done
     Skyscraper -p "$platform" -i "$romsdir" $output $media $FRONTEND $FLAGS
+
+    mkdir -p "$TIMESTAMP_DIR"
+    touch "$TIMESTAMP_DIR/$system"
+}
+
+get_all_systems() {
+    ls -p "$ROMSDIR" | grep '/$' | sed -e 's_/$__'
 }
 
 scrape_all() {
-    for system in $(ls -p "$ROMSDIR" | grep '/$' | sed -e 's_/$__'); do
+    for system in $(get_all_systems); do
         scrape "$system"
     done
 }
 
+system_from_rom_file() {
+    echo "${file#"$ROMSDIR"/}" | sed -e 's_/.*__'
+}
 
 ## main code
 
-if [ "${SKYSCRAPER_SKIP_GLOBAL_UPDATE}" != 'true' ]; then
+if [ "${SKYSCRAPER_RUN_GLOBAL_UPDATE}" == 'true' ]; then
     echo "perform global update"
     scrape_all
+else
+    for system in $(get_all_systems); do
+        if [ -f "$TIMESTAMP_DIR/$system" ]; then 
+            # if there are files newer than the last scrape process of this system, scrape again
+            if [ -n "$(find "$ROMSDIR/$system" -newer "$TIMESTAMP_DIR/$system")" ]; then
+                scrape "$system"
+            fi
+        else
+            # if no scrape has happened before, run scraping process
+            scrape "$system"
+        fi
+    done
 fi
 
 echo "starting main loop"
@@ -96,7 +129,6 @@ inotifywait -e create -e close_write -e moved_to --format "%w%f" -m -r -q "$ROMS
     if echo "$file" | grep -q "gamelist.xml\|${SKYSCRAPER_MEDIA_DIR:-/media/}"; then
         continue
     fi
-    system="$(echo "${file#"$ROMSDIR"/}" | sed -e 's_/.*__')"
     echo "new file: $file"
-    scrape "$system"
+    scrape "$(system_from_rom_file "$file")"
 done

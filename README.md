@@ -74,4 +74,4 @@ The environment variables supported by the container are:
 - `SKYSCRAPER_FLAGS`: additional flags passed to commandline invocations (default: `uinattend,unattendskip,relative`)
 - `SKYSCRAPER_NO_RELATIVE_PATHS`: if set to `true`, avoid using `relative` flag by default
 - `SKYSCRAPER_ROMS_TO_SUBDIR`: if set to `true`, keep the roms of a system in the `/roms/$system/roms` subdir to limit performance issues when mixing gamelists and roms files in a single tree, this implies `SKYSCRAPER_GAMELIST_DIR=.`
-- `SKYSCRAPER_SKIP_GLOBAL_UPDATE`: if set to `true`, avoid scanning all directories at launch, just wait for file change events
+- `SKYSCRAPER_RUN_GLOBAL_UPDATE`: if set to `true`, try to update all systems gamelists, otherwise only systems with new files will be treated
